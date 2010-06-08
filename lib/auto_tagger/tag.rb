@@ -14,7 +14,7 @@ module AutoTagger
     end
 
     def fetch
-      repository.run! "git fetch origin --tags"
+      repository.run! "git fetch #{remote_name} --tags"
     end
 
     def latest_from(stage)
@@ -22,7 +22,7 @@ module AutoTagger
     end
 
     def push
-      repository.run! "git push origin --tags"
+      repository.run! "git push #{remote_name} --tags"
     end
 
     def create(stage, commit = nil)
@@ -34,6 +34,10 @@ module AutoTagger
     end
 
     private
+
+    def remote_name
+      ENV['AUTOTAGGER_GIT_REMOTE_NAME'] || 'origin'
+    end
 
     def name_for(stage)
       "%s/%s" % [stage, Time.now.utc.strftime('%Y%m%d%H%M%S')]
